@@ -35,5 +35,5 @@ A project to ESP-ify the "Caroling Christmas Bells" product line from Ye Merrie 
 3. `IO39`
 
 ### Mainboard Detection Signals
-"Detect" (on the AUS-200, a 10k pulldown): `IO23`
-"Ref" (on the AUS-200, a 4V reference from resistor divider and IN4148): `IO5` (yup I messed up and maybe this should go on an ADC pin later)
+* "Detect" (on the AUS-200, a 10k pulldown): `IO23`
+* "Ref" (on the AUS-200, a 4V reference from resistor divider and IN4148): `IO5` (yup I messed up and maybe this should go on an ADC pin later)
