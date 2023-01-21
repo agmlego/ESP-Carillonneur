@@ -1,15 +1,20 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <WiFiUdp.h>
+// #include <WiFiUdp.h>
 #include <AppleMIDI.h>
+#include <ESPmDNS.h>
 
 #include "bells.h"
 #include "ssid.h"
+
+unsigned long t0 = millis();
+int8_t isConnected = 0;
 
 APPLEMIDI_CREATE_DEFAULTSESSION_INSTANCE(); 
 
 void setup()
 {
+  delay(5000);
   Serial.begin(115200);
   Serial.println("Setting up bells!");
   for (uint8_t bell = 0; bell < NUM_BELLS; ++bell)
@@ -22,55 +27,45 @@ void setup()
 
   auto status = WiFi.begin(WIFI_SSID, WIFI_PASS);
   while (WiFi.status() != WL_CONNECTED) {
-    printf("Waiting for WiFi connection\n");
+    Serial.println("Waiting for WiFi connection");
     delay(1000);
   }
 
+  Serial.println("Beginning MIDI...");
   MIDI.begin(); // listens on channel 1
-}
 
+  AppleMIDI.setHandleConnected([](const APPLEMIDI_NAMESPACE::ssrc_t & ssrc, const char* name) {
+    isConnected++;
+    Serial.print("Connected to session ");
+    Serial.print(ssrc);
+    Serial.println(name);
+  });
+  AppleMIDI.setHandleDisconnected([](const APPLEMIDI_NAMESPACE::ssrc_t & ssrc) {
+    isConnected--;
+    Serial.print("Disconnected ");
+    Serial.println(ssrc);
+  });
+  
+  MIDI.setHandleNoteOn([](byte channel, byte note, byte velocity) {
+    Serial.print("NoteOn ");
+    Serial.print(note);
+    Serial.print(" ");
+    Serial.println(velocity);
+  });
+  MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
+    Serial.print("NoteOff ");
+    Serial.print(note);
+    Serial.print(" ");
+    Serial.println(velocity);
+  });
 
-void printWifiData() 
-{
-  // print your WiFi shield's IP address:
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
-  Serial.println(ip);
-  // print your MAC address:
-  byte mac[6];
-  WiFi.macAddress(mac);
-  Serial.print("MAC address: ");
-  Serial.print(mac[5], HEX);
-  Serial.print(":");
-  Serial.print(mac[4], HEX);
-  Serial.print(":");
-  Serial.print(mac[3], HEX);
-  Serial.print(":");
-  Serial.print(mac[2], HEX);
-  Serial.print(":");
-  Serial.print(mac[1], HEX);
-  Serial.print(":");
-  Serial.println(mac[0], HEX);
-}
+  Serial.println("Beginning mDNS...");
+  MDNS.begin("Ye Merrie Minstrels");
 
+  Serial.println("Creating record...");
+  MDNS.addService("apple-midi", "udp", AppleMIDI.getPort());
 
-void printCurrentNet() 
-{
-  // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
-  // print the MAC address of the router you're attached to:
-  Serial.print("BSSID: ");
-  Serial.println(WiFi.BSSIDstr());
-  // print the received signal strength:
-  Serial.print("signal strength (RSSI):");
-  Serial.println(WiFi.RSSI());
-  // // print the encryption type:
-  // byte encryption = WiFi.encryptionType();
-  // Serial.print("Encryption Type:");
-  // Serial.println(encryption, HEX);
-  // Serial.println();
+  Serial.println("Starting loop...");
 }
 
 void loop()
