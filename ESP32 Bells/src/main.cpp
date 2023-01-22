@@ -57,6 +57,16 @@ size_t find_bell(byte midi_note) {
   return NO_BELL;
 }
 
+void start_bell_strike(size_t bellidx) {
+  digitalWrite(bell_config[bellidx].pin, HIGH);
+  bell_state[bellidx].stop_time = millis() + STRIKE_DURATION_MS; 
+}
+
+void finish_bell_strike(size_t bellidx) {
+  digitalWrite(bell_config[bellidx].pin, LOW);
+  bell_state[bellidx].stop_time = 0;
+}
+
 void printWifiData() 
 {
   // print your WiFi shield's IP address:
@@ -89,7 +99,7 @@ void setup()
   for (uint8_t bell = 0; bell < NUM_BELLS; ++bell)
   {
     pinMode(bells[bell], OUTPUT);
-    bell_state[bell].stop_time = 0;
+    finish_bell_strike(bell);
     Serial.print(bell_notes[bell]);
     Serial.print(" ");
   }
@@ -126,8 +136,7 @@ void setup()
 
     auto bellidx = find_bell(note);
     if (bellidx != NO_BELL) {
-      digitalWrite(bell_config[bellidx].pin, HIGH);
-      bell_state[bellidx].stop_time = millis() + STRIKE_DURATION_MS;
+      start_bell_strike(bellidx);
     }
   });
   MIDI.setHandleNoteOff([](byte channel, byte note, byte velocity) {
@@ -142,6 +151,12 @@ void setup()
 
   Serial.println("Creating record...");
   MDNS.addService("apple-midi", "udp", AppleMIDI.getPort());
+
+  Serial.println("Setting up init strike...");
+  for (uint8_t bell = 0; bell < NUM_BELLS; ++bell)
+  {
+    start_bell_strike(bell);
+  }
 
   Serial.println("Starting loop...");
 }
