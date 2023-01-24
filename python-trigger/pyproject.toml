@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "python-trigger"
+version = "0.1.0"
+description = ""
+authors = ["Jamie Bliss <jamie@ivyleav.es>"]
+# readme = "README.md"
+packages = [{include = "pytrigger"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pymidi = {git = "https://github.com/mik3y/pymidi.git"}
+zeroconf = "^0.47.1"
+
+[tool.poetry.scripts]
+trigger = 'pytrigger:main'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
