@@ -12,28 +12,28 @@ A project to ESP-ify the "Caroling Christmas Bells" product line from Ye Merrie 
 ## Pinout
 
 ### Blue (Right) Bell Connector
-0. `IO4` (Furthest from connector)
-1. `IO33`
-2. `IO25`
-3. `IO27`
-4. `IO26`
-5. `IO32` (Closest to connector)
+0. `IO23` (Furthest from connector)
+1. `IO21`
+2. `IO18`
+3. `IO5`
+4. `IO19`
+5. `IO22` (Closest to connector)
 
 
 ### Orange (Left) Bell Connector
-0. `IO17` (Furthest from connector)
-1. `IO19`
-2. `IO22`
-3. `IO21`
-4. `IO18`
-5. `IO16` (Closest to connector)
+0. `IO16` (Furthest from connector)
+1. `IO4`
+2. `IO26`
+3. `IO25`
+4. `IO27`
+5. `IO17` (Closest to connector)
 
 ### IR expansion Interface
-0. `IO34`
-1. `IO36`
-2. `IO35`
-3. `IO39`
+0. `IO32`
+1. `IO34`
+2. `IO33`
+3. `IO35`
 
 ### Mainboard Detection Signals
-* "Detect" (on the AUS-200, a 10k pulldown): `IO23`
-* "Ref" (on the AUS-200, a 4V reference from resistor divider and IN4148): `IO5` (yup I messed up and maybe this should go on an ADC pin later)
+* "Detect" (on the AUS-200, a 10k pulldown): `IO39`
+* "Ref" (on the AUS-200, a 4V reference from resistor divider and IN4148): `IO36`
