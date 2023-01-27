@@ -369,7 +369,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "ESP Carillonneur.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
