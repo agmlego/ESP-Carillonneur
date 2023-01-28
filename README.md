@@ -37,3 +37,7 @@ A project to ESP-ify the "Caroling Christmas Bells" product line from Ye Merrie 
 ### Mainboard Detection Signals
 * "Detect" (on the AUS-200, a 10k pulldown): `IO39`
 * "Ref" (on the AUS-200, a 4V reference from resistor divider and IN4148): `IO36`
+
+## Case
+
+The case design uses four M2 heat-set inserts ([94459A120](https://www.mcmaster.com/94459A120/)) and four M2 x 5mm button-head screws ([92095A452]https://www.mcmaster.com/92095A452/). The existing sliding door needs a 1/4" diameter slot cut in the back wall, 1/2" in from the mating edge. This will clear the antenna port.
